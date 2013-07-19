@@ -1,6 +1,6 @@
 #! /usr/bin/python2.7
 import os
-import sys, getopt
+import sys
 import argparse
 
 #Parse command line arguments
@@ -13,10 +13,20 @@ parser.add_argument("--index", help = "Bowtie2 index location.",
 parser.add_argument("--MEM", help = "Memory requirements for farm (MB).", default = "4500")
 parser.add_argument("--out", help = "TopHat2 output folder.", default = "./tophat_out")
 parser.add_argument("--ncores", help = "Number of cores to use.", default = "1")
+parser.add_argument("--txindex", help = "Path to transcriptome index")
 args = parser.parse_args()
 
-#"--GTF " + args.gtf, 
-tophat2_command = " ".join(["tophat2", "--no-coverage-search","--GTF " + args.gtf,"-o " + args.out, "-p" + args.ncores, args.index] + args.reads)
+#Set up TopHat arguments
+tophat2_arguments = ["tophat2",
+					"--no-coverage-search", 
+					"--GTF " + args.gtf, 
+					"-o " + args.out,
+					"-p" + args.ncores]
+#Add path to transcriptome index
+if args.txindex:
+	tophat2_arguments = tophat2_arguments + ["--transcriptome-index " + args.txindex]
+
+tophat2_command = " ".join(tophat2_arguments + [args.index] + args.reads)
 memory_string = "".join(['-R"select[mem>',args.MEM,'] rusage[mem=', args.MEM, ']" -M', args.MEM, " -G team170"])
 bsub_command = " ".join(["bsub", memory_string, "-o "+args.out+"/farm-output.%J.txt", "-n " + args.ncores,  tophat2_command])
 print(bsub_command)
