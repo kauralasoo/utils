@@ -13,7 +13,8 @@ parser.add_argument("--index", help = "Bowtie2 index location.",
 parser.add_argument("--MEM", help = "Memory requirements for farm (MB).", default = "4500")
 parser.add_argument("--out", help = "TopHat2 output folder.", default = "./tophat_out")
 parser.add_argument("--ncores", help = "Number of cores to use.", default = "1")
-parser.add_argument("--txindex", help = "Path to transcriptome index")
+parser.add_argument("--txindex", help = "Path to transcriptome index", 
+	default = "/nfs/users/nfs_k/ka8/group-scratch/kaur/annotations/GRCh37/Ensembl_72/Homo_sapiens.GRCh37.72")
 parser.add_argument("--library", help = "library type for TopHat2.")
 args = parser.parse_args()
 
