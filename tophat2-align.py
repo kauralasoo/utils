@@ -31,7 +31,7 @@ if args.library:
 	tophat2_arguments = tophat2_arguments + ["--library-type " + args.library]
 
 tophat2_command = " ".join(tophat2_arguments + [args.index] + args.reads)
-memory_string = "".join(['-R"select[mem>',args.MEM,'] rusage[mem=', args.MEM, ']" -M', args.MEM, " -G team170"])
+memory_string = "".join(['-R"span[hosts=1] select[mem>',args.MEM,'] rusage[mem=', args.MEM, ']" -M', args.MEM, " -G team170"])
 bsub_command = " ".join(["bsub", memory_string, "-o "+args.out+"/farm-output.%J.txt", "-n " + args.ncores,  tophat2_command])
 print(bsub_command)
 os.system(bsub_command)
