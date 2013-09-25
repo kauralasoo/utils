@@ -9,8 +9,7 @@ parser.add_argument("--nk5", help = "Folder of annotations in Natsuhiko format."
 args = parser.parse_args()
 
 bed_file = open(args.bed)
-last_chr = "1"
-annotfile = open(os.path.join(args.nk5, last_chr), 'wa')
+last_chr = ""
 for line in bed_file:
 	line = line.rstrip()
 	fields = line.split("\t")
@@ -35,6 +34,9 @@ for line in bed_file:
 	string = "\t".join([string,s, e])
 	
 	chrom = fields[0]
+	if last_chr == "":
+		last_chr = chrom
+		annotfile = open(os.path.join(args.nk5, last_chr), 'wa')
 	if chrom == last_chr:
 		annotfile.write(string + "\n")
 	else:

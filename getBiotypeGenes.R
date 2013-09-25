@@ -1,0 +1,5 @@
+library("biomaRt")
+ensembl = useMart("ensembl")
+ensembl = useDataset("hsapiens_gene_ensembl",mart=ensembl)
+biotypes = getBM(attributes = c("ensembl_gene_id", "gene_biotype"), mart = ensembl)
+write.table(biotypes, "../../annotations/GRCh37/Ensembl_72/gene_biotypes.txt")
