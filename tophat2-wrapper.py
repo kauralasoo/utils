@@ -9,6 +9,7 @@ parser.add_argument("--MEM", help = "Memory requirements for farm (MB).", defaul
 parser.add_argument("--out", help = "TopHat2 output folder.", default = "tophat2")
 parser.add_argument("--fastq", help = "Path to folder containing FASTQ files", default = "fastq")
 parser.add_argument("--ncores", help = "Number of cores to use.", default = "1")
+parser.add_argument("--library", help = "library type for TopHat2.")
 args = parser.parse_args()
 
 print args.MEM
@@ -26,6 +27,9 @@ for line in fileinput.input("-"):
 	#Create output dir if it does not exist
 	if not os.path.exists(output_dir):
 		os.makedirs(output_dir)
-	command = " ".join([script_path, "--MEM", args.MEM, "--out", output_dir, "--ncores", args.ncores, fq1, fq2 ])
+	arguments = ["--MEM", args.MEM, "--out", output_dir, "--ncores", args.ncores]
+	if args.library:
+		arguments = arguments + ["--library " + args.library]
+	command = " ".join([script_path] + arguments + [fq1, fq2 ])
 	print(command)
 	os.system(command)
