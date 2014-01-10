@@ -9,6 +9,7 @@ parser.add_argument("--counts", help = "Path to count files", default = "counts"
 parser.add_argument("--gtf", help = "Path to gene annotations in GTF format", 
 	default = "/nfs/users/nfs_k/ka8/group-scratch/kaur/annotations/GRCh37/Ensembl_72/Homo_sapiens.GRCh37.72.ERCC92.gtf")
 parser.add_argument("--execute", help = "If True then executes the command, otherwise just prints it out.", default  = "True")
+parser.add_argument("--strand", help = "0 (unstranded); 1 (stranded); 2(reversely stranded)", default = "0")
 args = parser.parse_args()
 
 #Iterate over all ids
@@ -16,7 +17,7 @@ for line in fileinput.input("-"):
 	line = line.rstrip()
 	bam_file = os.path.join(args.bams, line + ".bam")
 	count_file = os.path.join(args.counts, line + ".txt")
-	command = " ".join(["featureCounts -a", args.gtf, "-i", bam_file, "-o", count_file, "-b -p -C"])
+	command = " ".join(["featureCounts -a", args.gtf, "-i", bam_file, "-o", count_file, "-b -p -C", "-s", args.strand])
 	print(command)
 	if (args.execute == "True"):
 		os.system(command)

@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser(description = "Convert BAM file to a BedGraph f
 parser.add_argument("--bams", help = "Path to BAM files", default = "bams_tophat2")
 parser.add_argument("--bedgraphs", help = "Path to BedGraph files", default = "BedGraph")
 parser.add_argument("--bigwig", help = "Path to BigWig files", default = "BigWig")
-parser.add_argument("--chrlengths", help = "Path to gene annotations in GTF format", 
+parser.add_argument("--chrlengths", help = "Path to text file with chromosome lengths", 
 	default = "/nfs/users/nfs_k/ka8/group-scratch/kaur/annotations/GRCh37/bowtie2-index/chrom-sizes.txt")
 parser.add_argument("--execute", help = "If True then executes the command, otherwise just prints it out.", default  = "True")
 parser.add_argument("--split", help = "Treat the alignments as split or not.", default  = "True")
@@ -21,7 +21,7 @@ for line in fileinput.input("-"):
 	bg_file = os.path.join(args.bedgraphs, line + ".bg")
 	bw_file = os.path.join(args.bigwig, line + ".bw")
 	if args.split == "True":
-		command = " ".join(["bedtools genomecov -bga -ibam -split", bam_file, "-g", args.chrlengths, ">", bg_file])
+		command = " ".join(["bedtools genomecov -bga -split -ibam", bam_file, "-g", args.chrlengths, ">", bg_file])
 	else:
 		command = " ".join(["bedtools genomecov -bga -ibam", bam_file, "-g", args.chrlengths, ">", bg_file])
 

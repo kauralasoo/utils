@@ -16,7 +16,5 @@ for line in fileinput.input("-"):
 	command = " ".join(["mv",bam_in, bam_out])
 	print(command)
 	os.system(command)
-	index_command = "samtools index " + bam_out
-	print(index_command)
-	os.system(index_command)
+
 	
