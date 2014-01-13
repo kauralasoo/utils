@@ -5,7 +5,6 @@ import fileinput
 
 parser = argparse.ArgumentParser(description = "Run MISO on multiple samples", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--inserts", help = "Path to the insert size distribution summary file")
-parser.add_argument("--outfile", help = "Path to the output file")
 parser.add_argument("--miso_index", help = "Path to miso index directory.", default = "miso/miso_index/")
 parser.add_argument("--bams", help = "Path to BAM files.", default = "bams_tophat2")
 parser.add_argument("--read_length", help = "Read length.", default = "75")

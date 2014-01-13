@@ -22,9 +22,12 @@ paths_r1 = [os.path.join(args.outdir, id + ".1.fq") for id in ids]
 paths_r2 = [os.path.join(args.outdir, id + ".2.fq") for id in ids]
 
 
-#Iterate over bam files and sort
+#Iterate over bam files and convert to fastq
 for (bam, r1, r2) in zip(bams, paths_r1, paths_r2):
 	command = " ".join(["bamToFastq -i", bam, "-fq", r1, "-fq2", r2])
+	compress1 = " ".join(["gzip", r1])
+	compress2 = " ".join(["gzip", r2])
 	print(command)
 	os.system(command)
-
+	os.system(compress1)
+	os.system(compress2)
