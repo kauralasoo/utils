@@ -12,7 +12,7 @@ opt <- parse_args(OptionParser(option_list=option_list))
 
 #Read sample names and ids
 table = read.table(opt$s, comment.char = "")
-ids = as.vector(table[,1])
+ids = as.vector(table[,2])
 names = as.vector(table[,2])
 
 loadCounts <- function(count_folder, ids, names){

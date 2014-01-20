@@ -6,8 +6,7 @@ import fileinput
 parser = argparse.ArgumentParser(description = "Count the number of fragments in BAM file that overlap features in GTF file", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--bams", help = "Path to BAM files", default = "bams_tophat2")
 parser.add_argument("--counts", help = "Path to count files", default = "counts")
-parser.add_argument("--gtf", help = "Path to gene annotations in GTF format", 
-	default = "/nfs/users/nfs_k/ka8/group-scratch/kaur/annotations/GRCh37/Ensembl_72/Homo_sapiens.GRCh37.72.ERCC92.gtf")
+parser.add_argument("--gtf", help = "Path to gene annotations in GTF format")
 parser.add_argument("--execute", help = "If True then executes the command, otherwise just prints it out.", default  = "True")
 parser.add_argument("--strand", help = "0 (unstranded); 1 (stranded); 2(reversely stranded)", default = "0")
 args = parser.parse_args()
