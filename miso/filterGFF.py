@@ -24,8 +24,12 @@ genes = gene_dictionary.keys()
 db = gffutils.FeatureDB(args.GTFdb)
 
 for gene in genes:
-	gene_record = db[gene]
-	print(gene_record)
+	try:
+		gene_record = db[gene]
+		print(gene_record)
+	except gffutils.FeatureNotFoundError:
+		sys.stderr.write("ERROR: Gene " + gene +" not found in GFF file.\n")
+		continue
 	for isoform in db.children(gene_record, featuretype = "mRNA"):
 		isform_id = isoform.attributes["ID"] #Filter isoforms
 		if isform_id in transcript_dictionary:

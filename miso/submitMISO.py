@@ -5,10 +5,10 @@ import fileinput
 
 parser = argparse.ArgumentParser(description = "Run MISO on multiple samples", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--inserts", help = "Path to the insert size distribution summary file")
-parser.add_argument("--miso_index", help = "Path to miso index directory.", default = "miso/miso_index/")
-parser.add_argument("--bams", help = "Path to BAM files.", default = "bams_tophat2")
+parser.add_argument("--miso_index", help = "Path to miso index directory.")
+parser.add_argument("--bams", help = "Path to BAM files.")
 parser.add_argument("--read_length", help = "Read length.", default = "75")
-parser.add_argument("--output", help = "Path to output folder.", default = "miso/genes-psi/")
+parser.add_argument("--output", help = "Path to output folder.")
 parser.add_argument("--chunks", help = "Number of genes in a chunk.", default = "500")
 parser.add_argument("--settings", help = "Path to settings file.", default = "lps-response/miso/miso_settings.txt")
 args = parser.parse_args()

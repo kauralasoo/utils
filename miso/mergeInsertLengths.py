@@ -4,7 +4,7 @@ import argparse
 import fileinput
 
 parser = argparse.ArgumentParser(description = "Merge insert distribution estimates into one file.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("--insert", help = "Path to the insert-dist folder", default = "miso/insert-dist/")
+parser.add_argument("--insert", help = "Path to the insert-dist folder")
 parser.add_argument("--outfile", help = "Path to the output file")
 args = parser.parse_args()
 
