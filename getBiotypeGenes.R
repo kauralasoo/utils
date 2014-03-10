@@ -8,7 +8,7 @@ help="Path to gene biotypes text file.", metavar = "path")
 )
 opt <- parse_args(OptionParser(option_list=option_list))
 
-ensembl = useMart("ensembl")
+ensembl = useMart(host="dec2013.archive.ensembl.org", biomart="ENSEMBL_MART_ENSEMBL")
 ensembl = useDataset("hsapiens_gene_ensembl",mart=ensembl)
 biotypes = getBM(attributes = c("ensembl_gene_id", "gene_biotype"), mart = ensembl)
 write.table(biotypes, opt$b, quote = FALSE, row.names = FALSE)
