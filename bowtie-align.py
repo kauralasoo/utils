@@ -11,8 +11,13 @@ parser.add_argument("--output", help = "Path to output folder.")
 parser.add_argument("--ncores", help = "Number of cores to use.", default = "1")
 parser.add_argument("--tx_index", help = "Path to transcriptome index.")
 parser.add_argument("--bowtie_args", help = "Additional arguments passed to bowtie.", default = "")
+parser.add_argument("--fullref", help = "Additional arguments passed to bowtie.", default = "False")
 args = parser.parse_args()
 
+#Add additional arguemnts to bowtie
+additional_args = args.bowtie_args
+if (args.fullref == "True"):
+	additional_args = additional_args + " --fullref "
 
 for line in fileinput.input("-"):
 	line = line.rstrip()
@@ -22,7 +27,7 @@ for line in fileinput.input("-"):
 	sam_file = os.path.join(args.output, line)
 
 	bowtie_command = ''.join(['bowtie -a --best --strata -S -m 100 -X 500 --chunkmbs 256 ',
-		args.bowtie_args, 
+		additional_args, 
 		'-p ', args.ncores, ' ', args.tx_index, 
 		' -1 <(gzip -dc ', fq1, ')', 
 		' -2 <(gzip -dc ', fq2, ')',
