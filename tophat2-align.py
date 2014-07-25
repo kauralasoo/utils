@@ -13,6 +13,7 @@ parser.add_argument("--index", help = "Bowtie2 index location.",
 parser.add_argument("--MEM", help = "Memory requirements for farm (MB).", default = "4500")
 parser.add_argument("--out", help = "TopHat2 output folder.", default = "./tophat_out")
 parser.add_argument("--ncores", help = "Number of cores to use.", default = "1")
+parser.add_argument("--queue", help = "Number of cores to use.", default = "normal")
 parser.add_argument("--txindex", help = "Path to transcriptome index", 
 	default = "/nfs/users/nfs_k/ka8/group-scratch/kaur/annotations/GRCh37/Ensembl_74/Homo_sapiens.GRCh37.74")
 parser.add_argument("--library", help = "library type for TopHat2.")
@@ -32,7 +33,7 @@ if args.library:
 
 tophat2_command = " ".join(tophat2_arguments + [args.index] + args.reads)
 memory_string = "".join(['-R"span[hosts=1] select[mem>',args.MEM,'] rusage[mem=', args.MEM, ']" -M', args.MEM, " -G team170"])
-bsub_command = " ".join(["bsub", memory_string, "-o "+args.out+"/farm-output.%J.txt", "-n " + args.ncores,  tophat2_command])
+bsub_command = " ".join(["bsub", memory_string, "-o "+args.out+"/farm-output.%J.txt", "-n " + args.ncores, "-q " + args.queue,  tophat2_command])
 print(bsub_command)
 os.system(bsub_command)
 
