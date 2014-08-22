@@ -10,29 +10,29 @@ parser = argparse.ArgumentParser(description = "Align RNA-Seq reads to the refer
 parser.add_argument("--fastq", help = "Path to FASTQ folder.")
 parser.add_argument("--output", help = "Path to output folder.")
 parser.add_argument("--ncores", help = "Number of cores to use.", default = "1")
-parser.add_argument("--index", help = "Path to transcriptome index.")
+parser.add_argument("--tx_index", help = "Path to transcriptome index.")
 parser.add_argument("--bowtie_args", help = "Additional arguments passed to bowtie.", default = "")
-parser.add_argument("--single_end", help = "The reads are single end", default = "False")
-parser.add_argument("--suffix", help = "Suffix of the FASTQ files", default = ".fq.gz")
+parser.add_argument("--fullref", help = "Add fullref parameter required by mmseq.", default = "False")
+
 args = parser.parse_args()
 
 #Add additional arguemnts to bowtie
 additional_args = args.bowtie_args
+if (args.fullref == "True"):
+	additional_args = additional_args + " --fullref "
 
 for line in fileinput.input("-"):
 	line = line.rstrip()
+	#specifiy fastq files
+	fq1 = os.path.join(args.fastq, line + ".1.fq.gz")
+	fq2 = os.path.join(args.fastq, line + ".2.fq.gz")
+	sam_file = os.path.join(args.output, line)
 
-	if (args.single_end == "True"):
-		fq = os.path.join(args.fastq, line + args.suffix)
-		reads_parameter = ['<(gzip -dc ' + fq +')']
-	else:
-		fq1 = os.path.join(args.fastq, line + ".1" + args.suffix)
-		fq2 = os.path.join(args.fastq, line + ".2" + args.suffix)
-		reads_parameter = [" ".join(["-1", '<(gzip -dc ' + fq1 + ')', "-2", '<(gzip -dc ' + fq2 + ')'])]
-
-	bam_file = os.path.join(args.output, line)
-
-	bowtie_command = " ".join(["bowtie", additional_args, '-p', args.ncores, args.index] +
-		reads_parameter + ["| samtools view -bS - >", bam_file + ".bam"])
+	bowtie_command = ''.join(['bowtie -a --best --strata -S -m 100 -X 500 --chunkmbs 256 ',
+		additional_args, 
+		'-p ', args.ncores, ' ', args.tx_index, 
+		' -1 <(gzip -dc ', fq1, ')', 
+		' -2 <(gzip -dc ', fq2, ')',
+		' | samtools view -F 0xC -bS - | samtools sort -n -m 4000000000 - ', sam_file])
 	print(bowtie_command)
 	subprocess.call(['bash','-c',bowtie_command])
