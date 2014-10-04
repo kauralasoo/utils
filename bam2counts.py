@@ -2,6 +2,7 @@ import os
 import sys
 import argparse
 import fileinput
+import subprocess
 
 parser = argparse.ArgumentParser(description = "Count the number of fragments in BAM file that overlap features in GTF file", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--bams", help = "Path to BAM files", default = "bams_tophat2")
@@ -16,10 +17,10 @@ for line in fileinput.input("-"):
 	line = line.rstrip()
 	bam_file = os.path.join(args.bams, line + ".bam")
 	count_file = os.path.join(args.counts, line + ".txt")
-	command = " ".join(["featureCounts -a", args.gtf, "-i", bam_file, "-o", count_file, "-b -p -C", "-s", args.strand])
+	command = " ".join(["featureCounts -a", args.gtf, "-o", count_file, "-p -C", "-s", args.strand, bam_file])
 	print(command)
 	if (args.execute == "True"):
-		os.system(command)
+		subprocess.call(['bash','-c',command])
 	#for chrom in chrnames:
 	#	annot_file = os.path.join(args.annotations, chrom + ".gz")
 	#	command = " ".join(["tabix", tabix_file, chrom, "| /nfs/users/nfs_n/nk5/bin/countReadChrom", annot_file, "| gzip >>", count_file])
