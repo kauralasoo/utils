@@ -21,9 +21,3 @@ for line in fileinput.input("-"):
 	print(command)
 	if (args.execute == "True"):
 		subprocess.call(['bash','-c',command])
-	#for chrom in chrnames:
-	#	annot_file = os.path.join(args.annotations, chrom + ".gz")
-	#	command = " ".join(["tabix", tabix_file, chrom, "| /nfs/users/nfs_n/nk5/bin/countReadChrom", annot_file, "| gzip >>", count_file])
-	#	print command
-	#	os.system(command)
-#tabix tbxs/10506_0#1.tbx.gz ERCC-00171 | /nfs/users/nfs_n/nk5/bin/countReadChrom ../../annotations/GRCh37/Ensembl_69/nk5/ERCC-00171.gz -exon | gzip > 1.gz
