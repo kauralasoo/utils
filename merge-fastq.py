@@ -3,25 +3,23 @@ import argparse
 import fileinput
 import subprocess
 
-parser = argparse.ArgumentParser(description = "Merge fastq files from multiple runs into single experiment.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("--indir", help = "Directory of the input SRA files.")
+parser = argparse.ArgumentParser(description = "Merge fastq files from multiple runs into single sample.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("--indir", help = "Directory of the input FASTQ files.")
 parser.add_argument("--outdir", help = "Directory of the output FASTQ files.")
+parser.add_argument("--suffix", help = "Directory of the output FASTQ files.", default = ".fastq.gz")
 args = parser.parse_args()
 
-experiment_run_dict = dict()
 for line in fileinput.input("-"):
-	id = line.rstrip()
-	fields = id.split("\t")
-	if(fields[0] in experiment_run_dict):
-		experiment_run_dict[fields[0]].append(fields[1])
-	else:
-		experiment_run_dict[fields[0]] = [fields[1]]
+	map = line.rstrip()
+	fields = map.split("\t")
+	sample_name = fields[0]
+	file_names = fields[1].split(";")
 
-for exp in experiment_run_dict.keys():
-	runs = experiment_run_dict[exp]
-	files = [os.path.join(args.indir, run + ".fastq.gz") for run in runs]
-	exp_file = os.path.join(args.outdir, exp + ".fastq.gz")
-	command = " ".join(["zcat"] + files + ["| gzip > ", exp_file])
+	#Construct file names from ids
+	sample_file = os.path.join(args.outdir, sample_name + args.suffix)
+	files = [os.path.join(args.indir, file_name + args.suffix) for file_name in file_names]
+	
+	command = " ".join(["zcat"] + files + ["| gzip >", sample_file])
 	print(command)
 	subprocess.call(['bash','-c',command])
 

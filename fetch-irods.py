@@ -1,35 +1,25 @@
 import os
 import argparse
+import fileinput
+import subprocess
 
 parser = argparse.ArgumentParser(description = "Fetch BAM files from IRODS.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("--runid", help = "Run ID in the IRODS database.")
-parser.add_argument("--laneids", help = "Comma-separted list of lane ids")
-parser.add_argument("--sampleids", help = "Comma-separated list of sample ids")
 parser.add_argument("--dir", help = "Directory to store the BAM files.")
+parser.add_argument("--suffix", help = "Suffix of the file in irods.")
+
 args = parser.parse_args()
 
-def CreateSampleIds(runid, lanes, samples):
-	"""Construct sample IDs for IRODS"""
-	lanes = map(int,lanes.split(","))
-	samples = map(int,samples.split(","))
+def buildIrodsPath(sample_id, input_format):
+	#Build irods file path from irods sample id
+	run_id = sample_id.split("_")[0]
+	irods_path = os.path.join("/seq", run_id, sample_id + "." + input_format)
+	return(irods_path)
 
-	ids = list()
-	#Iterate over lanes
-	for lane in lanes:
-		#Iterate over samples
-		for sample in samples:
-			sample_id = args.runid + "_" + str(lane) + "#" + str(sample)
-			ids.append(sample_id)
-	return(ids)
-
-#Construct names for BAMs
-ids = CreateSampleIds(args.runid, args.laneids, args.sampleids)
-path = "/".join(["/seq", args.runid, ""])
-bams = [path + id + ".bam" for id in ids]
-
-#Download all BAM files
-for bam in bams:
-	command = " ".join(["iget", bam, args.dir])
+for line in fileinput.input("-"):
+	id = line.rstrip()
+	irods_path = buildIrodsPath(id, args.suffix)
+	command = " ".join(["iget", irods_path, args.dir])
 	print(command)
-	os.system(command)
+	subprocess.call(['bash','-c',command])
+
 
