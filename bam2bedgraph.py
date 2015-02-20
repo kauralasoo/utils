@@ -1,14 +1,13 @@
+#TODO: get old version from git
 import os
 import sys
 import argparse
 import fileinput
 
 parser = argparse.ArgumentParser(description = "Convert BAM file to a BedGraph file using bedtools", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("--bams", help = "Path to BAM files", default = "bams_tophat2")
-parser.add_argument("--bedgraphs", help = "Path to BedGraph files", default = "BedGraph")
-parser.add_argument("--bigwig", help = "Path to BigWig files", default = "BigWig")
-parser.add_argument("--chrlengths", help = "Path to text file with chromosome lengths", 
-	default = "/nfs/users/nfs_k/ka8/group-scratch/kaur/annotations/GRCh37/bowtie2-index/chrom-sizes.txt")
+parser.add_argument("--indir", help = "Directory of the input BAM files.")
+parser.add_argument("--outdir", help = "Directory of the output BED files.")
+parser.add_argument("--chrlengths", help = "Path to text file with chromosome lengths")
 parser.add_argument("--execute", help = "If True then executes the command, otherwise just prints it out.", default  = "True")
 parser.add_argument("--split", help = "Treat the alignments as split or not.", default  = "True")
 

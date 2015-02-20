@@ -7,6 +7,7 @@ parser = argparse.ArgumentParser(description = "Merge fastq files from multiple 
 parser.add_argument("--indir", help = "Directory of the input FASTQ files.")
 parser.add_argument("--outdir", help = "Directory of the output FASTQ files.")
 parser.add_argument("--suffix", help = "Directory of the output FASTQ files.", default = ".fastq.gz")
+parser.add_argument("--execute", help = "If True then executes the command, otherwise just prints it out.", default  = "True")
 args = parser.parse_args()
 
 for line in fileinput.input("-"):
@@ -21,5 +22,6 @@ for line in fileinput.input("-"):
 	
 	command = " ".join(["zcat"] + files + ["| gzip >", sample_file])
 	print(command)
-	subprocess.call(['bash','-c',command])
+	if (args.execute == "True"):
+		subprocess.call(['bash','-c',command])
 

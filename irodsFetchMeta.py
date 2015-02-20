@@ -37,7 +37,12 @@ for id in ids:
 	path = buildIrodsPath(id, "cram")
 	imeta_cmd = "imeta ls -d " + path
 	sample_meta = stringToMetaDict(subprocess.check_output(['bash','-c',imeta_cmd]))
-	sample_id_pairs.append([id, sample_meta["sample"]])
+	print(sample_meta)
+	if "sample_public_name" in sample_meta:
+		sample_id_pairs.append([id, sample_meta["sample_public_name"]])
+	else:
+		sample_id_pairs.append([id, sample_meta["sample"]])
+
 
 #Match individual irods ids to sample ids
 sample_dict = dict()

@@ -12,7 +12,7 @@ args = parser.parse_args()
 def buildIrodsPath(sample_id, input_format):
 	#Build irods file path from irods sample id
 	run_id = sample_id.split("_")[0]
-	irods_path = os.path.join("/seq", run_id, sample_id + "." + input_format)
+	irods_path = os.path.join("/seq", run_id, sample_id + input_format)
 	return(irods_path)
 
 for line in fileinput.input("-"):
