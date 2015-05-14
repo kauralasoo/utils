@@ -5,10 +5,10 @@ import argparse
 import fileinput
 import subprocess
 
-parser = argparse.ArgumentParser(description = "Move BAMS from tophat2 folders to single folder and rename.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("--samples", help = "Path to txt file that maps old names to new names")
-parser.add_argument("--filedir", help = "Path to dir where all the files are")
-parser.add_argument("--suffix", help = "Suffix of the files to be renames")
+parser = argparse.ArgumentParser(description = "Rename multiple files in a directory.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("--samples", help = "Path to a text file that maps old names to new names.")
+parser.add_argument("--filedir", help = "Path to dir where all the files are.")
+parser.add_argument("--suffix", help = "Suffix of the files to be renamed.")
 parser.add_argument("--execute", help = "Execute the script", default = "False")
 args = parser.parse_args()
 
