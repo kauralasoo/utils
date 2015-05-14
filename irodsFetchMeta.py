@@ -29,6 +29,20 @@ def buildIrodsPath(sample_id, input_format):
 	irods_path = os.path.join("/seq", run_id, sample_id + "." + input_format)
 	return(irods_path)
 
+def extractSampleIdFromMetaDict(sample_meta):
+	if "sample_public_name" in sample_meta:
+		if sample_meta["sample_public_name"] != "NA":
+			sample_id = sample_meta["sample_public_name"]
+			return(sample_id)
+	if "sample" in sample_meta:
+		if sample_meta["sample"] != "NA":
+			sample_id = sample_meta["sample"]
+			return(sample_id)
+	if "library" in sample_meta:
+		if sample_meta["library"] !="NA":
+			sample_id = sample_meta["library"]
+			return(sample_id)
+
 #Fetch sample name for all files from iRODS
 ids = open(args.irodsList)
 sample_id_pairs = list()
@@ -37,11 +51,8 @@ for id in ids:
 	path = buildIrodsPath(id, "cram")
 	imeta_cmd = "imeta ls -d " + path
 	sample_meta = stringToMetaDict(subprocess.check_output(['bash','-c',imeta_cmd]))
-	print(sample_meta)
-	if "sample_public_name" in sample_meta:
-		sample_id_pairs.append([id, sample_meta["sample_public_name"]])
-	else:
-		sample_id_pairs.append([id, sample_meta["sample"]])
+	sample_id = extractSampleIdFromMetaDict(sample_meta)
+	sample_id_pairs.append([id, sample_id])
 
 
 #Match individual irods ids to sample ids
