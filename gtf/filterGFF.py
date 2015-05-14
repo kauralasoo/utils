@@ -17,7 +17,7 @@ for line in table_file:
 	line = line.rstrip()
 	fields = line.split("\t")
 	gene_dictionary[fields[0]] = 1
-	transcript_dictionary[fields[2]] = 1
+	transcript_dictionary[fields[1]] = 1
 genes = gene_dictionary.keys() 
 
 #Open GFF database
@@ -30,7 +30,7 @@ for gene in genes:
 	except gffutils.FeatureNotFoundError:
 		sys.stderr.write("ERROR: Gene " + gene +" not found in GFF file.\n")
 		continue
-	for isoform in db.children(gene_record, featuretype = "mRNA"):
+	for isoform in db.children(gene_record):
 		isform_id = isoform.attributes["ID"] #Filter isoforms
 		if isform_id in transcript_dictionary:
 			print(isoform)

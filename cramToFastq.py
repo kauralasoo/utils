@@ -1,5 +1,4 @@
 #! /usr/bin/python2.7
-# Script to fetch reads from irods and convert them to Fastq
 import os
 import sys
 import argparse
