@@ -30,9 +30,9 @@ for gene in genes:
 	except gffutils.FeatureNotFoundError:
 		sys.stderr.write("ERROR: Gene " + gene +" not found in GFF file.\n")
 		continue
-	for isoform in db.children(gene_record):
-		isform_id = isoform.attributes["ID"] #Filter isoforms
-		if isform_id in transcript_dictionary:
+	for isoform in db.children(gene_record, featuretype = "transcript"):
+		isoform_id = isoform.attributes["transcript_id"][0] #Filter isoforms
+		if isoform_id in transcript_dictionary:
 			print(isoform)
 			for exon in db.children(isoform, featuretype = "exon"):
 				print(exon)
