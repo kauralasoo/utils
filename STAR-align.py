@@ -17,7 +17,7 @@ args = parser.parse_args()
 
 for line in fileinput.input("-"):
 	sample_id = line.rstrip()
-	standard_flags =  "--readFilesCommand zcat --outSAMtype BAM Unsorted SortedByCoordinate --outWigType bedGraph --outWigStrand Stranded --outWigNorm RPM"
+	standard_flags =  "--readFilesCommand zcat --outSAMtype BAM Unsorted SortedByCoordinate --outWigType bedGraph --outWigStrand Stranded --outWigNorm RPM --limitBAMsortRAM 10000000000"
 	out_folder = os.path.join(args.outputDir, sample_id)
 	if not os.path.exists(out_folder):
 		os.makedirs(out_folder)
