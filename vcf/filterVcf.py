@@ -6,6 +6,7 @@ import subprocess
 parser = argparse.ArgumentParser(description = "Filter VCF file by genotype and MAF", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--sampleList", help = "Text file with sample names to be retained.")
 parser.add_argument("--MAF", help = "Minimum minor allele frequency of variants to be retained.")
+parser.add_argument("--IMP2", help = "Minimum IMP2 info score.")
 parser.add_argument("--vcfSuffix", help = "Suffix of the VCF file.", default = ".vcf.gz")
 parser.add_argument("--indir", help = "Path to the input directory.")
 parser.add_argument("--outdir", help = "Path to the output directory.")
@@ -20,7 +21,8 @@ for line in fileinput.input("-"):
 	#Set up a bcftools pipeline to perform basic filtering
 	select_command = " ".join(["bcftools view -O z -S", args.sampleList, input_vcf])
 	filter_command = "".join(["bcftools filter -O z -i 'MAF[0] >= ", args.MAF, "' -"])
-	command = " ".join([select_command, "|", filter_command, ">", selected_vcf])
+	imp2_command = "".join(["bcftools filter -O z -i 'IMP2[1] >= ", args.IMP2, "' -"])
+	command = " ".join([select_command, "|", filter_command,"|", imp2_command, ">", selected_vcf])
 	print(command)
 
 	if (args.execute == "True"):
