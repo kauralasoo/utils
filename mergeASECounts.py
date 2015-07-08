@@ -9,6 +9,7 @@ signal(SIGPIPE,SIG_DFL)
 parser = argparse.ArgumentParser(description = "Take ASE counts from multiple samples and merge them into one file.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--indir", help = "Directory of the input count files.")
 parser.add_argument("--sample_list", help = "Text file mapping sample names to file names.")
+parser.add_argument("--suffix", help = "Suffix of the ASECounts file.")
 args = parser.parse_args()
 
 #Load sample names from disk
@@ -29,7 +30,7 @@ variant_dictionary = dict()
 variant_list = list()
 header = ""
 for sample_number in range(len(sample_list)):
-	file_name = os.path.join(args.indir, sample_list[sample_number][1])
+	file_name = os.path.join(args.indir, sample_list[sample_number][1] + args.suffix)
 	sample_file = open(file_name, "r")
 	header = sample_file.readline().rstrip().split("\t")
 	for line in sample_file:
