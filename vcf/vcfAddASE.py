@@ -55,7 +55,7 @@ for line in vcf_file:
 
 		#Update header
 		print '##FORMAT=<ID=AS,Number=.,Type=String,Description="Allele-specific expression counts from RNA-seq">' #Format tag
-		print '##vcfAddASE.py --ASEcounts ' + args.ASEcounts #Edit trail
+		print '##vcfAddASE_ASEcounts=' + args.ASEcounts #Edit trail
 		print vcf_header #Sample names
 	#Update VCF file
 	else:
