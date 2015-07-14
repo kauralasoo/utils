@@ -4,7 +4,7 @@ import argparse
 import fileinput
 import subprocess
 
-parser = argparse.ArgumentParser(description = "Sort a list of BAM files by read name.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser = argparse.ArgumentParser(description = "Update the header of a list of bam files. Sample names from STDIN.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--indir", help = "Directory of the input BAM files.")
 parser.add_argument("--outdir", help = "Directory of the output BAM files.")
 parser.add_argument("--insuffix", help = "Suffix of the input bam file.", default = ".bam")
