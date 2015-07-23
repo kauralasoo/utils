@@ -30,7 +30,7 @@ variant_dictionary = dict()
 variant_list = list()
 header = ""
 for sample_number in range(len(sample_list)):
-	file_name = os.path.join(args.indir, sample_list[sample_number][1] + args.suffix)
+	file_name = os.path.join(args.indir, sample_list[sample_number][1], sample_list[sample_number][1] + args.suffix)
 	sample_file = open(file_name, "r")
 	header = sample_file.readline().rstrip().split("\t")
 	for line in sample_file:

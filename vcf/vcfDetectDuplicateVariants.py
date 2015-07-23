@@ -5,12 +5,14 @@ import subprocess
 
 parser = argparse.ArgumentParser(description = "Iterate thorugh a sorted VCF file and detect SNPs with indentical coorinates.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--vcf", help = "Path to the vcf file.")
+parser.add_argument("--duplicates", help = "Path to duplicates file.")
 args = parser.parse_args()
 
 vcf_file = open(args.vcf)
 last_line = ""
 last_coord = ['0','0']
 last_fields = ""
+dup_file = open(args.duplicates,'w')
 for line in vcf_file:
 	line = line.rstrip()
 	if (line[0] == "#"):
@@ -29,6 +31,9 @@ for line in vcf_file:
 		else: #Last line and new line have same coordinades
 			last_alt = last_fields[4]
 			new_alt =  fields[4]
+			#Write all duplicates to a file
+			dup_file.write(last_line +"\n")
+			dup_file.write(line +"\n")
 			#If one of the SNPs is multiallelic and the other is not then keep the biallelic
 			if len(last_alt) > 1 & len(new_alt) == 1:
 				print(line)
