@@ -71,9 +71,10 @@ for line in fileinput.input("-"):
 
 		tabix_command = " ".join(["tabix", args.vcf, cis_window])
 		rasqual_command = " ".join(["rasqual -y", args.readCounts, "-k", args.offsets, "-n", args.n, "-j", str(feature_number), 
-			"-f", gene_id, "-l", n_cis_snps, "-m", n_feature_snps, "-s", feature_start, "-e", feature_end, "-t -z"])
+			"-f", gene_id, "-l", n_cis_snps, "-m", n_feature_snps, "-s", feature_start, "-e", feature_end, " -z"])
 		command = tabix_command + " | " + rasqual_command
-		print(command)
+		subprocess.call(['bash','-c',command])
+
 
 
 
