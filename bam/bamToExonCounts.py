@@ -23,16 +23,16 @@ for line in fileinput.input("-"):
 	line = line.rstrip()
 	#Set output directory
 	if args.outDir == "sampleDir":
-		outDir = args.sampleDir
+		outdirectory = args.sampleDir
 	else:
-		outDir = args.outDir
+		outdirectory = args.outDir
 	#Are subdirs used or not?
 	if args.subdir == "True":
 		bam_file = os.path.join(args.sampleDir, line, line + args.bamSuffix)
-		count_file = os.path.join(outDir, line, line + args.countsSuffix)
+		count_file = os.path.join(outdirectory, line, line + args.countsSuffix)
 	else:
 		bam_file = os.path.join(args.sampleDir, line + args.bamSuffix)
-		count_file = os.path.join(args.sampleDir, line + args.countsSuffix)
+		count_file = os.path.join(outdirectory, line + args.countsSuffix)
 	featureCounts_command = " ".join(["featureCounts -a", args.gtf, "-o", count_file, "-p -f -C -D 2000 -d 25 --read2pos 5", "-s", args.strand, "-t", args.type])
 	if(args.multimapping == "True"):
 		featureCounts_command = featureCounts_command + " -M"
