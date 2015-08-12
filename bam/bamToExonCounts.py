@@ -33,7 +33,8 @@ for line in fileinput.input("-"):
 	else:
 		bam_file = os.path.join(args.sampleDir, line + args.bamSuffix)
 		count_file = os.path.join(outdirectory, line + args.countsSuffix)
-	featureCounts_command = " ".join(["featureCounts -a", args.gtf, "-o", count_file, "-p -f -C -D 2000 -d 25 --read2pos 5", "-s", args.strand, "-t", args.type])
+	
+	featureCounts_command = " ".join(["featureCounts -a", args.gtf, "-o", count_file, "-f -C -D 2000 -d 25 --read2pos 5", "-s", args.strand, "-t", args.type])
 	if(args.multimapping == "True"):
 		featureCounts_command = featureCounts_command + " -M"
 	command = " ".join([featureCounts_command, bam_file])

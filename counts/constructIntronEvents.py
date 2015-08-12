@@ -11,6 +11,7 @@ parser.add_argument("--exonCountSuffix", help = "Suffix of the counts file.", de
 parser.add_argument("--eventSuffix", help = "Suffix of the intron retention event file.", default = ".intron_events.txt")
 parser.add_argument("--intronGFF", help = "Path to intron annotations in GFF3 format.")
 parser.add_argument("--exonGFF", help = "Patho to exon annotations in GFF3 format.")
+parser.add_argument("--subdir", help = "Is each sample in a subdirectory?", default = "True")
 args = parser.parse_args()
 
 def loadFeatureIDs(feature_file, feature_type):
@@ -32,9 +33,15 @@ exon_list = loadFeatureIDs(args.exonGFF, "exon")
 #Iterate over sample ids and construct file names
 for sample_id in fileinput.input("-"):
 	sample_id = sample_id.rstrip()
-	exon_count_file = os.path.join(args.sampleDir, sample_id, sample_id + args.exonCountSuffix)
-	intron_count_file = os.path.join(args.sampleDir, sample_id, sample_id + args.intronCountSuffix)
-	intron_event_file = os.path.join(args.sampleDir, sample_id, sample_id + args.eventSuffix)
+	#Are samples stored in a subdirectory?
+	if args.subdir == "True":
+		exon_count_file = os.path.join(args.sampleDir, sample_id, sample_id + args.exonCountSuffix)
+		intron_count_file = os.path.join(args.sampleDir, sample_id, sample_id + args.intronCountSuffix)
+		intron_event_file = os.path.join(args.sampleDir, sample_id, sample_id + args.eventSuffix)
+	else:
+		exon_count_file = os.path.join(args.sampleDir, sample_id + args.exonCountSuffix)
+		intron_count_file = os.path.join(args.sampleDir, sample_id + args.intronCountSuffix)
+		intron_event_file = os.path.join(args.sampleDir, sample_id + args.eventSuffix)
 
 	#Load exon counts into a dictionary
 	exon_counts = dict()
