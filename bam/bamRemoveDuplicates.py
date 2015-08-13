@@ -7,7 +7,7 @@ import subprocess
 parser = argparse.ArgumentParser(description = "Remove duplicate reads and fragments from the BAM file.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--indir", help = "Directory of the input BAM files.")
 parser.add_argument("--outdir", help = "Directory of the output BAM files.")
-parser.add_argument("--insuffix", help = "Suffix of the input bam file.", default = ".filtered.bam")
+parser.add_argument("--insuffix", help = "Suffix of the input bam file.", default = ".reheadered.bam")
 parser.add_argument("--outsuffix", help = "Suffix of the output bam file.", default = ".no_duplicates.bam")
 parser.add_argument("--execute", help = "Execute the script", default = "False")
 args = parser.parse_args()
