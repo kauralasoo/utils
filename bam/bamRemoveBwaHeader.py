@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser(description = "Remove BWA header from the BAM f
 parser.add_argument("--indir", help = "Path to input directory.")
 parser.add_argument("--outdir", help = "Path to output directory.")
 parser.add_argument("--insuffix", help = "Suffix of the input bam file.", default = ".filtered.bam")
-parser.add_argument("--outsuffix", help = "Suffix of the output bam file.", default = ".reaheadered.bam")
+parser.add_argument("--outsuffix", help = "Suffix of the output bam file.", default = ".reheadered.bam")
 args = parser.parse_args()
 
 for line in fileinput.input("-"):
