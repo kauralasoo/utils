@@ -74,7 +74,7 @@ TSS_df = as.data.frame(TSS_granges) %>% tbl_df() %>%
 TSS_df[is.na(TSS_df)] = 0
 
 #Add SNP counts into the original data.frame and write results to disks
-snp_counts = dplyr::select(TSS_df, gene_id, feature_snp_count, cis_snp_count)
+snp_counts = dplyr::select(TSS_df, gene_id, range_start, range_end, feature_snp_count, cis_snp_count)
 result = dplyr::left_join(union_exon_coords, snp_counts, by = "gene_id")
 write.table(result, opt$c, row.names = FALSE, sep ="\t", quote = FALSE)
 

@@ -11,8 +11,8 @@ parser.add_argument("--n", help = "Number of samples.")
 parser.add_argument("--vcf", help = "Path to the VCF file with ASE counts")
 parser.add_argument("--geneids", help = "List of gene ids in the same order as in the counts matrix.")
 parser.add_argument("--geneMetadata", help = "Matrix with the coordinates of the cis region; number of cis SNPs and fSNPs for each gene.")
-parser.add_argument("--featureCoords", help = "Matrix containing comma-separated start/end coordinates for each feature.")
 parser.add_argument("--execute", help = "Execute the script", default = "False")
+parser.add_argument("--rasqualBin", help = "Path to the the RASQUAL binary.", default = "/nfs/users/nfs_n/nk5/Project/C/RASQUAL/master/bin/rasqual_mt_icc")
 args = parser.parse_args()
 
 #Check that none of the required arguments is empty
@@ -28,8 +28,6 @@ if args.vcf == None:
 	sys.exit("--vcf is a required parameter.")
 if args.geneMetadata == None:
 	sys.exit("--geneMetadata is a required parameter.")
-if args.featureCoords == None:
-	sys.exit("--featureCoords is a required parameter.")
 
 #Import gene IDs into a dict:
 gene_dict = dict()
@@ -48,13 +46,6 @@ for gene in metadata_file:
 	fields = gene.rstrip().split("\t")
 	metadata_dict[fields[0]] = fields
 
-#Import feature coordinates into a dict
-feature_coords = dict()
-feature_coords_file = open(args.featureCoords, "r")
-for line in feature_coords_file:
-	fields = line.rstrip().split("\t")
-	feature_coords[fields[0]] = fields[1:3]
-
 #Iterate over gene_ids and run RASQUAL
 for line in fileinput.input("-"):
 	gene_ids = line.rstrip().split(",")
@@ -63,17 +54,19 @@ for line in fileinput.input("-"):
 
 		#Parse gene meta data
 		gene_meta = metadata_dict[gene_id]
-		cis_window = gene_meta[1] + ":" + gene_meta[2] + "-" + gene_meta[3]
-		n_feature_snps = gene_meta[4]
-		n_cis_snps = gene_meta[5]
-		feature_start = feature_coords[gene_id][0]
-		feature_end = feature_coords[gene_id][1]
+		cis_window = gene_meta[1] + ":" + gene_meta[5] + "-" + gene_meta[6]
+		n_feature_snps = gene_meta[7]
+		n_cis_snps = gene_meta[8]
+		feature_start = gene_meta[3]
+		feature_end = gene_meta[4]
 
 		tabix_command = " ".join(["tabix", args.vcf, cis_window])
-		rasqual_command = " ".join(["rasqual -y", args.readCounts, "-k", args.offsets, "-n", args.n, "-j", str(feature_number), 
+		rasqual_command = " ".join([args.rasqualBin, "-y", args.readCounts, "-k", args.offsets, "-n", args.n, "-j", str(feature_number), 
 			"-f", gene_id, "-l", n_cis_snps, "-m", n_feature_snps, "-s", feature_start, "-e", feature_end, " -z"])
 		command = tabix_command + " | " + rasqual_command
-		subprocess.call(['bash','-c',command])
+		sys.stderr.write(command + "\n")
+		if (args.execute == "True"):
+			subprocess.call(['bash','-c',command])
 
 
 
