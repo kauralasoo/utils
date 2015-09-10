@@ -11,6 +11,7 @@ parser.add_argument("--insuffix", help = "Suffix of the input bam file.", defaul
 parser.add_argument("--control", help = "Path to the input file.", default = "-25")
 parser.add_argument("--q", help = "MACS2 q parameter.", default = "0.01")
 parser.add_argument("--broad", help = "Run MACS2 in broad mode.", default = "False")
+parser.add_argument("--bampe", help = "Run MACS2 with the BAMPE format flag.", default = "False")
 parser.add_argument("--execute", help = "If True then executes the command, otherwise just prints it out.", default  = "True")
 
 args = parser.parse_args()
@@ -23,6 +24,8 @@ for line in fileinput.input("-"):
 	command = " ".join(["macs2 callpeak -t", bam_file, "-c", args.control, "-q", args.q, "--outdir", outdir, "-n", line])
 	if (args.broad == "True"):
 		command = command + " --broad"
+	if (args.bampe == "True"):
+		command = command + " -f BAMPE"
 	print(command)
 	if (args.execute == "True"):
 		subprocess.call(['bash','-c',command])
