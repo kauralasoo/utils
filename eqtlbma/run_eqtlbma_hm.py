@@ -11,6 +11,7 @@ parser.add_argument("--ngrid", help = "Number of grid points.", default = "10")
 parser.add_argument("--nsubgrp", help = "Number of subgroups.")
 parser.add_argument("--dim", help = "Dimensions of the model.")
 parser.add_argument("--execute", help = "Execute the commands.", default = "True")
+parser.add_argument("--configs", help = "Subset of configurations to keep.")
 args = parser.parse_args()
 
 #Construct file names
@@ -21,6 +22,10 @@ grid_weights = os.path.join(args.workdir, args.outprefix + "_grid_weights.txt")
 
 #Set up the commands
 eqtlbma_command = " ".join(["eqtlbma_hm --data", input_file, "--nsubgrp", args.nsubgrp, "--ngrid", args.ngrid, "--dim", args.dim, "--out", model_out])
+#Select a subset of configurations to keep
+if args.configs != None:
+	eqtlbma_command = " ".join([eqtlbma_command, "--configs ",  "\""+args.configs+"\""])
+
 config_command = " ".join(["zcat", model_out, '| grep "#config" | awk \'{split($1,a,"."); print a[2]"\\t"$2}\' > ', config_weights])
 grid_command = " ".join(["zcat", model_out, '| grep "#grid" | cut -f2 >', grid_weights])
 
