@@ -12,6 +12,7 @@ parser.add_argument("--nsubgrp", help = "Number of subgroups.")
 parser.add_argument("--dim", help = "Dimensions of the model.")
 parser.add_argument("--execute", help = "Execute the commands.", default = "True")
 parser.add_argument("--configs", help = "Subset of configurations to keep.")
+parser.add_argument("--thread", help = "Number of threads to use.", default = "1")
 args = parser.parse_args()
 
 #Construct file names
@@ -21,7 +22,7 @@ config_weights = os.path.join(args.workdir, args.outprefix + "_config_weights.tx
 grid_weights = os.path.join(args.workdir, args.outprefix + "_grid_weights.txt")
 
 #Set up the commands
-eqtlbma_command = " ".join(["eqtlbma_hm --data", input_file, "--nsubgrp", args.nsubgrp, "--ngrid", args.ngrid, "--dim", args.dim, "--out", model_out])
+eqtlbma_command = " ".join(["eqtlbma_hm --data", input_file, "--nsubgrp", args.nsubgrp, "--ngrid", args.ngrid, "--dim", args.dim, "--out", model_out, "--thread", args.thread])
 #Select a subset of configurations to keep
 if args.configs != None:
 	eqtlbma_command = " ".join([eqtlbma_command, "--configs ",  "\""+args.configs+"\""])
