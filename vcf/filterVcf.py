@@ -21,7 +21,7 @@ for line in fileinput.input("-"):
 	#Set up a bcftools pipeline to perform basic filtering
 	select_command = " ".join(["bcftools view -O z -S", args.sampleList, input_vcf])
 	filter_command = "".join(["bcftools filter -O z -i 'MAF[0] >= ", args.MAF, "' -"])
-	imp2_command = "".join(["bcftools filter -O z -i 'INFO[0] >= ", args.IMP2, "' -"])
+	imp2_command = "".join(["bcftools filter -O z -i 'INFO[0] >= ", args.INFO, "' -"])
 	#If IMP2 is not specified then exclude it
 	if args.INFO == "NULL":
 		command = " ".join([select_command, "|", filter_command, ">", selected_vcf])

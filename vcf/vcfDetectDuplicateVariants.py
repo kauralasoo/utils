@@ -7,9 +7,16 @@ import gzip
 parser = argparse.ArgumentParser(description = "Iterate thorugh a sorted VCF file and detect SNPs with indentical coorinates.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--vcf", help = "Path to the vcf file.")
 parser.add_argument("--duplicates", help = "Path to duplicates file.")
+parser.add_argument("--format", help = "Is input vcf file bgzipped or not.", default = ".vcf.gz")
+parser.add_argument("--action", help = "What to do with remaining duplicate variants [keepfirst|remove].", default = "remove")
 args = parser.parse_args()
 
-vcf_file = gzip.open(args.vcf)
+#Check if input file is bgzipped or not
+if args.format == ".vcf.gz":
+	vcf_file = gzip.open(args.vcf)
+else:
+	vcf_file = open(args.vcf)
+
 last_line = ""
 last_coord = ['0','0']
 last_fields = ""
@@ -45,9 +52,12 @@ for line in vcf_file:
 				print(last_line)
 			elif len(fields[8]) < len(last_fields[8]):
 				print(line)
-			#Otherwise just print randomly the first line.
+			#What do with remaining duplicate variants [keepfirst|remove].
 			else:
-				print(line)
+				if args.action == "keepfirst":
+					print(line)
+				elif args.action == "remove":
+					pass
 			#Set to empty string so that it would not be printed at the next iteration of the loop
 			last_line = ""
 if last_line != "":
