@@ -15,7 +15,11 @@ parser.add_argument("--bfs", help = "Which bayes factors to compute.", default =
 parser.add_argument("--gridL", help = "Path to the large grid.", default = "macrophage-gxe-study/data/eqtlbma/grid_phi2_oma2_general.txt")
 parser.add_argument("--gridS", help = "Path to the small grid.", default = "macrophage-gxe-study/data/eqtlbma/grid_phi2_oma2_with-configs.txt")
 parser.add_argument("--analys", help = "Type of analysis to perform.", default = "join")
+parser.add_argument("--thread", help = "Number of threads to use.", default = 1)
+parser.add_argument("--nperm", help = "Number of permutations to perform.")
+parser.add_argument("--pbf", help = "which BF to use as the test statistic for the joint-analysis permutations.", default = "all")
 parser.add_argument("--execute", help = "Execute the commands.", default = "True")
+ --nperm 250 --pbf all -
 args = parser.parse_args()
 
 if args.indir == None:
@@ -62,7 +66,11 @@ for line in fileinput.input("-"):
 	gene_coords_batch_bed.close()
 
 	#Construct eqtlbma command
-	eqtlbma_command = " ".join(["eqtlbma_bf --geno", geno_list, "--exp", exp_list, "--covar", covar_list, "--scoord", snp_coords, "--gcoord", gene_coords_batch, "--anchor TSS --cis", args.cis, "--out", output_file, "--analys", args.analys, "--gridL", args.gridL, "--gridS", args.gridS, "--bfs", args.bfs, "--error", args.error, "-v", args.v])
+	eqtlbma_command = " ".join(["eqtlbma_bf --geno", geno_list, "--exp", exp_list, "--covar", covar_list, "--scoord", snp_coords, "--gcoord", gene_coords_batch, "--anchor TSS --cis", args.cis, "--out", output_file, "--analys", args.analys, "--gridL", args.gridL, "--gridS", args.gridS, "--bfs", args.bfs, "--error", args.error, "-v", args.v, "--thread", args.thread])
+	#Modify the command if doing permutations
+	if args.nperm != None:
+		eqtlbma_command  = " ".join(["eqtlbma_command", "--nperm", args.nperm, "--pbf", args.pbf, "--trick"])
+
 	print(eqtlbma_command)
 	
 	#Execute
