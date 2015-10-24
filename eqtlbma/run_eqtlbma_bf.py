@@ -18,6 +18,7 @@ parser.add_argument("--analys", help = "Type of analysis to perform.", default =
 parser.add_argument("--thread", help = "Number of threads to use.", default = "1")
 parser.add_argument("--nperm", help = "Number of permutations to perform.")
 parser.add_argument("--pbf", help = "which BF to use as the test statistic for the joint-analysis permutations.", default = "all")
+parser.add_argument("--wrtsize", help = "Number of genes to write at once.", default = "10")
 parser.add_argument("--execute", help = "Execute the commands.", default = "True")
 args = parser.parse_args()
 

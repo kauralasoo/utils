@@ -10,6 +10,7 @@ parser.add_argument("--outdir", help = "Directory of the eqtlbma output files.")
 parser.add_argument("--outprefix", help = "Prefix of the output files.")
 parser.add_argument("--geneBatches", help = "Text file containing batch ids.")
 parser.add_argument("--suffix", help = "Suffix of the results file.", default = "_l10abfs_raw.txt.gz")
+parser.add_argument("--permutationsBFs", help = "If merging permutation BFs then skip the first two lines.", default = "False")
 args = parser.parse_args()
 
 if args.outdir == None:
@@ -49,6 +50,9 @@ for batch_id in batch_ids:
 	#Skip the first line for all files except the first one
 	if read_first_file:
 		batch_out_file.readline()
+		#If merging permutation BFs then skip the first two lines
+		if (args.permutationsBFs == "True"):
+			batch_out_file.readline()
 	for line in batch_out_file:
 		output_file_handle.write(line)
 	batch_out_file.close()
