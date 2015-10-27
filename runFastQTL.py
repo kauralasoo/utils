@@ -25,8 +25,6 @@ if args.W == None:
 	sys.exit("--W is a required parameter.")
 if args.cov == None:
 	sys.exit("--cov is a required parameter.")
-if args.permute == None:
-	sys.exit("--permute is a required parameter.")
 
 #Construct file names
 for line in fileinput.input("-"):
@@ -34,7 +32,10 @@ for line in fileinput.input("-"):
 	chunks = chunk.split(" ")
 	print(chunks)
 	outfile = args.out + ".chunk_" + chunks[0] + "_" + chunks[1] + ".txt.gz"
-	command = " ".join(["fastQTL.1.165.linux --vcf", args.vcf, "--bed", args.bed, "--chunk", chunk, "--cov", args.cov, "--out", outfile, "--permute", args.permute, "-W", args.W])
+	command = " ".join(["fastQTL.static --vcf", args.vcf, "--bed", args.bed, "--chunk", chunk, "--cov", args.cov, "--out", outfile, "-W", args.W])
+	#Only perform permutations if specified
+	if (args.permute != None): 
+		command  = " ".join([command, "--permute", args.permute])
 	print(command)
 	if args.execute == "True":
 		subprocess.call(['bash','-c',command])
