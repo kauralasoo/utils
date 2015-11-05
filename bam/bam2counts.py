@@ -13,6 +13,7 @@ parser.add_argument("--execute", help = "If True then executes the command, othe
 parser.add_argument("--strand", help = "0 (unstranded); 1 (stranded); 2(reversely stranded)", default = "0")
 parser.add_argument("--multimapping", help = "Count multimapping reads.", default = "False")
 parser.add_argument("--unpaired", help = "BAM contains single-end reads.", default = "False")
+parser.add_argument("--D", help = "Maximum insert size.", default = "2000")
 
 args = parser.parse_args()
 
@@ -25,7 +26,7 @@ for line in fileinput.input("-"):
 	if(args.multimapping == "True"):
 		featureCounts_command = featureCounts_command + " -M"
 	if(args.unpaired == "False"):
-		featureCounts_command = featureCounts_command + "-p -C -D 2000 -d 25"
+		featureCounts_command = " ".join([featureCounts_command, "-p -C -D", args.D, "-d 25"])
 	command = " ".join([featureCounts_command, bam_file])
 	print(command)
 	if (args.execute == "True"):

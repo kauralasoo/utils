@@ -6,7 +6,7 @@ import subprocess
 parser = argparse.ArgumentParser(description = "Filter VCF file by genotype and MAF", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--sampleList", help = "Text file with sample names to be retained.")
 parser.add_argument("--MAF", help = "Minimum minor allele frequency of variants to be retained.")
-parser.add_argument("--INFO", help = "Minimum INFO score.", default = "NULL")
+parser.add_argument("--INFO", help = "Minimum INFO score.")
 parser.add_argument("--vcfSuffix", help = "Suffix of the VCF file.", default = ".vcf.gz")
 parser.add_argument("--indir", help = "Path to the input directory.")
 parser.add_argument("--outdir", help = "Path to the output directory.")
@@ -20,13 +20,20 @@ for line in fileinput.input("-"):
 
 	#Set up a bcftools pipeline to perform basic filtering
 	select_command = " ".join(["bcftools view -O z -S", args.sampleList, input_vcf])
-	filter_command = "".join(["bcftools filter -O z -i 'MAF[0] >= ", args.MAF, "' -"])
-	imp2_command = "".join(["bcftools filter -O z -i 'INFO[0] >= ", args.INFO, "' -"])
-	#If IMP2 is not specified then exclude it
-	if args.INFO == "NULL":
-		command = " ".join([select_command, "|", filter_command, ">", selected_vcf])
+	
+	#Check if MAF is specified or not
+	if args.MAF == None:
+		command = select_command
 	else:
-		command = " ".join([select_command, "|", filter_command,"|", imp2_command, ">", selected_vcf])
+		filter_command = "".join(["bcftools filter -O z -i 'MAF[0] >= ", args.MAF, "' -"])
+		command = " ".join([select_command, "|", filter_command])
+
+	#If IMP2 is not specified then exclude it
+	if args.INFO == None:
+		command = " ".join([command, ">", selected_vcf])
+	else:
+		imp2_command = "".join(["bcftools filter -O z -i 'INFO[0] >= ", args.INFO, "' -"])
+		command = " ".join([command, "|", imp2_command, ">", selected_vcf])
 	print(command)
 
 	if (args.execute == "True"):
