@@ -14,7 +14,8 @@ parser.add_argument("--strand", help = "0 (unstranded); 1 (stranded); 2(reversel
 parser.add_argument("--multimapping", help = "Count multimapping reads.", default = "False")
 parser.add_argument("--unpaired", help = "BAM contains single-end reads.", default = "False")
 parser.add_argument("--D", help = "Maximum insert size.", default = "2000")
-
+parser.add_argument("--donotsort", help = "Do not sort the BAM file", default = "False")
+parser.add_argument("--O", help = "Assign reads to all overlapping features.", default = "False")
 args = parser.parse_args()
 
 #Iterate over all ids
@@ -25,6 +26,10 @@ for line in fileinput.input("-"):
 	featureCounts_command = " ".join(["featureCounts -a", args.gtf, "-o", count_file, "-s", args.strand])
 	if(args.multimapping == "True"):
 		featureCounts_command = featureCounts_command + " -M"
+	if(args.donotsort == "True"):
+		featureCounts_command = featureCounts_command + " --donotsort"
+	if(args.O == "True"):
+		featureCounts_command = featureCounts_command + " -O"
 	if(args.unpaired == "False"):
 		featureCounts_command = " ".join([featureCounts_command, "-p -C -D", args.D, "-d 25"])
 	command = " ".join([featureCounts_command, bam_file])
