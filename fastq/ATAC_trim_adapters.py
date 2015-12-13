@@ -12,6 +12,8 @@ parser.add_argument("--atacPrimers", help = "Path to ATAC primers file (columns:
 parser.add_argument("--sampleIndexMap", help = "Text file linking sample_ids to i5 and i7 tags names (columns: sample_name, i5_tag, i7_tag).")
 parser.add_argument("--suffix", help = "suffix of the FASTQ file,", default = ".fastq.gz")
 parser.add_argument("--outSuffix", help = "suffix of the output FASTQ file,", default = ".trimmed.fastq.gz")
+parser.add_argument("--i5rc", help = "Use the reverse complement of the i5 sequence.", default = "True")
+parser.add_argument("--i7rc", help = "Use the reverse complement of the i7 sequence,", default = "True")
 args = parser.parse_args()
 
 #Import primer sequences into dictionary
@@ -21,7 +23,7 @@ for line in primer_file:
 	line = line.rstrip()
 	fields = line.split("\t")
 	if fields[0] != "name":
-		primer_dict[fields[0]] = fields[2]
+		primer_dict[fields[0]] = fields[1:3]
 
 #Import sample tag names into dictionary
 sample_index_dict = dict()
@@ -37,8 +39,14 @@ for line in fileinput.input("-"):
 	print(sample_id)
 	#Find the correct indexes for each sample
 	indexes = sample_index_dict[sample_id]
-	i5_rc = primer_dict[indexes[0]]
-	i7_rc = primer_dict[indexes[1]]
+	if args.i5rc == "True":
+		i5_rc = primer_dict[indexes[0]][1]
+	else:
+		i5_rc = primer_dict[indexes[0]][0]
+	if args.i7rc == "True":
+		i7_rc = primer_dict[indexes[1]][1]
+	else:
+		i7_rc = primer_dict[indexes[1]][0]
 
 	#Construct full i5 and i7 primer sequences
 	i7_primer = "CTGTCTCTTATACACATCTCCGAGCCCACGAGAC" + i7_rc + "ATCTCGTATGCCGTCTTCTGCTTG"
