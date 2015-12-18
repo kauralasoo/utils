@@ -8,7 +8,7 @@ signal(SIGPIPE,SIG_DFL)
 
 parser = argparse.ArgumentParser(description = "Take ASE counts from multiple samples and merge them into one file.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--indir", help = "Directory of the input count files.")
-parser.add_argument("--sample_list", help = "Text file mapping sample names to file names.")
+parser.add_argument("--sample_list", help = "Text file mapping sample names to file names (columns: genotype_id, sample_id).")
 parser.add_argument("--suffix", help = "Suffix of the ASECounts file.")
 args = parser.parse_args()
 
