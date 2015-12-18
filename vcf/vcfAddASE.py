@@ -30,7 +30,7 @@ ase_sample_dict = dict()
 for i in range(0,len(ase_sample_names)):
 	if (ase_sample_names[i] in sample_genptype_dict):
 		genotype_id = sample_genptype_dict[ase_sample_names[i]]
-	ase_sample_dict[genotype_id] = i
+		ase_sample_dict[genotype_id] = i
 
 #Construct a dictionary of ASE counts
 ase_dict = dict()
