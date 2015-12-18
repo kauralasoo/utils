@@ -8,6 +8,7 @@ signal(SIGPIPE,SIG_DFL)
 
 parser = argparse.ArgumentParser(description = "Add ASE counts data into the VCF file.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--ASEcounts", help = "Path to the ASE counts file.")
+parser.add_argument("--ASESampleGenotypeMap", help = "Text file mapping ASE sample names to genotype ids.")
 parser.add_argument("--VCFfile", help = "Path to the VCF file.")
 args = parser.parse_args()
 
@@ -16,10 +17,20 @@ ase_file = open(args.ASEcounts)
 ase_header = ase_file.readline().rstrip().split("\t")
 ase_sample_names = ase_header[5:]
 
+#Read mapping to genptype ids
+sg_map_file = open(args.ASESampleGenotypeMap)
+sample_genptype_dict = dict()
+for line in sg_map_file:
+	line = line.rstrip()
+	fields = line.split("\t")
+	sample_genptype_dict[fields[0]] = fields[1]
+
 #Construct a sample name dict
 ase_sample_dict = dict()
 for i in range(0,len(ase_sample_names)):
-	ase_sample_dict[ase_sample_names[i]] = i
+	if (ase_sample_names[i] in sample_genptype_dict):
+		genotype_id = sample_genptype_dict[ase_sample_names[i]]
+	ase_sample_dict[genotype_id] = i
 
 #Construct a dictionary of ASE counts
 ase_dict = dict()
