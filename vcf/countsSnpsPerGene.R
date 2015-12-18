@@ -28,7 +28,7 @@ snp_granges = GRanges(seqnames = snp_coords[,1], ranges = IRanges(start = snp_co
 
 #Import exon coordinates
 union_exon_coords = read.table(opt$e, stringsAsFactors = FALSE, header = TRUE)
-union_exon_coords = dplyr::mutate(exon_starts = as.character(exon_starts), exon_ends = as.character(exon_ends))
+union_exon_coords = dplyr::mutate(union_exon_coords, exon_starts = as.character(exon_starts), exon_ends = as.character(exon_ends))
 
 #Create a df of exon coords
 exon_df = ldply(dlply(union_exon_coords, .(gene_id), 
