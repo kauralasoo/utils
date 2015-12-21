@@ -4,13 +4,14 @@ import argparse
 import fileinput
 import subprocess
 
-parser = argparse.ArgumentParser(description = "Run RASQUAL on a list of genes.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser = argparse.ArgumentParser(description = "Run RASQUAL on a list of genes. The script expects two-column TAB-separared file in STDIN, where the first column contains batch id and the second column contains comma-separated list of gene ids. Example: batch_1\tATAC_peak_13421,ATAC_peak_13422", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--readCounts", help = "Binary matrix containing read counts in each sample.")
 parser.add_argument("--offsets", help = "Binary matrix with sample-specific offsets.")
 parser.add_argument("--n", help = "Number of samples.")
-parser.add_argument("--vcf", help = "Path to the VCF file with ASE counts")
+parser.add_argument("--vcf", help = "Path to the VCF file with ASE counts.")
+parser.add_argument("--outdir", help = "Path to the output directory.")
 parser.add_argument("--geneids", help = "List of gene ids in the same order as in the counts matrix.")
-parser.add_argument("--geneMetadata", help = "Matrix with the coordinates of the cis region; number of cis SNPs and fSNPs for each gene.")
+parser.add_argument("--geneMetadata", help = "Gene metadata matrix with the following columns (in the same order): gene_id, chromosome_name, strand, exon_starts, exon_ends, range_start, range_end, feature_snp_count, cis_snp_count. Values in range_start and range_end columns specify the start and end of the cis region.")
 parser.add_argument("--execute", help = "Execute the script", default = "False")
 parser.add_argument("--rasqualBin", help = "Path to the the RASQUAL binary.", default = "/nfs/users/nfs_n/nk5/Project/C/RASQUAL/master/bin/rasqual_mt_icc")
 args = parser.parse_args()
@@ -28,6 +29,8 @@ if args.vcf == None:
 	sys.exit("--vcf is a required parameter.")
 if args.geneMetadata == None:
 	sys.exit("--geneMetadata is a required parameter.")
+if args.outdir == None:
+	sys.exit("--outdir is a required parameter.")
 
 #Import gene IDs into a dict:
 gene_dict = dict()
@@ -46,9 +49,11 @@ for gene in metadata_file:
 	fields = gene.rstrip().split("\t")
 	metadata_dict[fields[0]] = fields
 
-#Iterate over gene_ids and run RASQUAL
+#Iterate over batches of gene ids and run RASQUAL
 for line in fileinput.input("-"):
-	gene_ids = line.rstrip().split(",")
+	line = line.rstrip().split("\t")
+	batch_id = line[0]
+	gene_ids = line[1].split(",")
 	for gene_id in gene_ids:
 		feature_number = gene_dict[gene_id]
 
@@ -63,12 +68,13 @@ for line in fileinput.input("-"):
 		tabix_command = " ".join(["tabix", args.vcf, cis_window])
 		rasqual_command = " ".join([args.rasqualBin, "-y", args.readCounts, "-k", args.offsets, "-n", args.n, "-j", str(feature_number), 
 			"-f", gene_id, "-l", n_cis_snps, "-m", n_feature_snps, "-s", feature_start, "-e", feature_end, " -z"])
-		command = tabix_command + " | " + rasqual_command
-		sys.stderr.write(command + "\n")
+		output_file = os.path.join(args.outdir, batch_id + ".txt")
+		command = tabix_command + " | " + rasqual_command + " >> " + output_file
+		sys.stdout.write(command + "\n")
 		if (args.execute == "True"):
 			subprocess.call(['bash','-c',command])
 
 
 
 
-
+	
