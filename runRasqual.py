@@ -29,8 +29,8 @@ if args.vcf == None:
 	sys.exit("--vcf is a required parameter.")
 if args.geneMetadata == None:
 	sys.exit("--geneMetadata is a required parameter.")
-if args.outdir == None:
-	sys.exit("--outdir is a required parameter.")
+if args.outprefix == None:
+	sys.exit("--outprefix is a required parameter.")
 
 #Import gene IDs into a dict:
 gene_dict = dict()
