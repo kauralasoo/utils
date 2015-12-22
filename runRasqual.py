@@ -9,7 +9,7 @@ parser.add_argument("--readCounts", help = "Binary matrix containing read counts
 parser.add_argument("--offsets", help = "Binary matrix with sample-specific offsets.")
 parser.add_argument("--n", help = "Number of samples.")
 parser.add_argument("--vcf", help = "Path to the VCF file with ASE counts.")
-parser.add_argument("--outdir", help = "Path to the output directory.")
+parser.add_argument("--outprefix", help = "Prefix of the output file.")
 parser.add_argument("--geneids", help = "List of gene ids in the same order as in the counts matrix.")
 parser.add_argument("--geneMetadata", help = "Gene metadata matrix with the following columns (in the same order): gene_id, chromosome_name, strand, exon_starts, exon_ends, range_start, range_end, feature_snp_count, cis_snp_count. Values in range_start and range_end columns specify the start and end of the cis region.")
 parser.add_argument("--execute", help = "Execute the script", default = "False")
@@ -68,7 +68,7 @@ for line in fileinput.input("-"):
 		tabix_command = " ".join(["tabix", args.vcf, cis_window])
 		rasqual_command = " ".join([args.rasqualBin, "-y", args.readCounts, "-k", args.offsets, "-n", args.n, "-j", str(feature_number), 
 			"-f", gene_id, "-l", n_cis_snps, "-m", n_feature_snps, "-s", feature_start, "-e", feature_end, " -z"])
-		output_file = os.path.join(args.outdir, batch_id + ".txt")
+		output_file = args.outprefix + "." batch_id + ".txt"
 		command = tabix_command + " | " + rasqual_command + " >> " + output_file
 		sys.stdout.write(command + "\n")
 		if (args.execute == "True"):
