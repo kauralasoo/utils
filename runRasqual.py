@@ -68,7 +68,7 @@ for line in fileinput.input("-"):
 		tabix_command = " ".join(["tabix", args.vcf, cis_window])
 		rasqual_command = " ".join([args.rasqualBin, "-y", args.readCounts, "-k", args.offsets, "-n", args.n, "-j", str(feature_number), 
 			"-f", gene_id, "-l", n_cis_snps, "-m", n_feature_snps, "-s", feature_start, "-e", feature_end, " -z"])
-		output_file = args.outprefix + "." batch_id + ".txt"
+		output_file = args.outprefix + "." + batch_id + ".txt"
 		command = tabix_command + " | " + rasqual_command + " >> " + output_file
 		sys.stdout.write(command + "\n")
 		if (args.execute == "True"):
