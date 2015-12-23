@@ -7,6 +7,7 @@ import subprocess
 parser = argparse.ArgumentParser(description = "Run RASQUAL on a list of genes. The script expects two-column TAB-separared file in STDIN, where the first column contains batch id and the second column contains comma-separated list of gene ids. Example: batch_1\tATAC_peak_13421,ATAC_peak_13422", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--readCounts", help = "Binary matrix containing read counts in each sample.")
 parser.add_argument("--offsets", help = "Binary matrix with sample-specific offsets.")
+parser.add_argument("--covariates", help = "Binary matrix with covariates.")
 parser.add_argument("--n", help = "Number of samples.")
 parser.add_argument("--vcf", help = "Path to the VCF file with ASE counts.")
 parser.add_argument("--outprefix", help = "Prefix of the output file.")
@@ -68,6 +69,8 @@ for line in fileinput.input("-"):
 		tabix_command = " ".join(["tabix", args.vcf, cis_window])
 		rasqual_command = " ".join([args.rasqualBin, "-y", args.readCounts, "-k", args.offsets, "-n", args.n, "-j", str(feature_number), 
 			"-f", gene_id, "-l", n_cis_snps, "-m", n_feature_snps, "-s", feature_start, "-e", feature_end, " -z"])
+		if (args.covariates != None): #If specified, add covariates to the rasqual command
+			rasqual_command = " ".join([rasqual_command, "-x", args.covariates])
 		output_file = args.outprefix + "." + batch_id + ".txt"
 		command = tabix_command + " | " + rasqual_command + " >> " + output_file
 		sys.stdout.write(command + "\n")
