@@ -8,3 +8,6 @@ Scripts designed to simplify running [RASQUAL](https://github.com/dg13/rasqual) 
 * `vcfAddASE.py` - Adds allele-specifc counts from `mergeASECounts.py` into a VCF file.
 * `runRasqual.py` - Run RASQUAL on a batch of genes.
 
+## bam
+Scripts for processing BAM files.
+* `bamToFragmentBed.py` - Use bedtools to convert paired-end BAM file into a BED file of fragments.
