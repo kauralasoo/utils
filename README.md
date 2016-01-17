@@ -14,4 +14,4 @@ Scripts for processing BAM files.
 
 ## vcf
 Scripts for processing VCF files.
-* `liftoverVcfGenotypes.py` - Uses [CrossMap.py](crossmap.sourceforge.net/) to lift over VCF file from hg19 coordinates to GRCh38 coordinates.
+* `liftoverVcfGenotypes.py` - Uses [CrossMap.py](http://crossmap.sourceforge.net/) to lift over VCF file from hg19 coordinates to GRCh38 coordinates.
