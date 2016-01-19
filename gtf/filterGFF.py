@@ -4,8 +4,8 @@ import argparse
 import gffutils
 
 parser = argparse.ArgumentParser(description = "Keep only those entries in a GFF file that are also present in the transcript table.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("--GTFdb", help = "Path to GTF db file")
-parser.add_argument("--txtable", help = "Path transcript table")
+parser.add_argument("--GTFdb", help = "Path to GTF database file")
+parser.add_argument("--txtable", help = "Path transcript table (two columns: gene_id, transcript_id; contains header row)")
 args = parser.parse_args()
 
 #Read gene and transcript IDs from disk
