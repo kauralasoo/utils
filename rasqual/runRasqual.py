@@ -5,9 +5,9 @@ import fileinput
 import subprocess
 
 parser = argparse.ArgumentParser(description = "Run RASQUAL on a list of genes. The script expects two-column TAB-separared file in STDIN, where the first column contains batch id and the second column contains comma-separated list of gene ids. Example: batch_1\tATAC_peak_13421,ATAC_peak_13422", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("--readCounts", help = "Binary matrix containing read counts in each sample.")
-parser.add_argument("--offsets", help = "Binary matrix with sample-specific offsets.")
-parser.add_argument("--covariates", help = "Binary matrix with covariates.")
+parser.add_argument("--readCounts", help = "Binary matrix containing read counts in each sample (genes in rows, samples in columns).")
+parser.add_argument("--offsets", help = "Binary matrix with sample-specific offsets (genes in rows, samples in columns).")
+parser.add_argument("--covariates", help = "Binary matrix with covariates (samples in rows, covariates in columns).")
 parser.add_argument("--n", help = "Number of samples.")
 parser.add_argument("--vcf", help = "Path to the VCF file with ASE counts.")
 parser.add_argument("--outprefix", help = "Prefix of the output file.")
