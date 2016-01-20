@@ -36,7 +36,7 @@ for i in range(0,len(ase_sample_names)):
 ase_dict = dict()
 for variant in ase_file:
 	fields = variant.rstrip().split("\t")
-	variant_id = tuple(fields[0:5])
+	variant_id = tuple([fields[i] for i in [0,1,3,4]]) #Use CHR, POS, REF and ALT as the id of a variant.
 	variant_counts = fields[5:]
 	ase_dict[variant_id] = variant_counts
 
@@ -77,7 +77,7 @@ for line in vcf_file:
 
 		#Add AS counts to each variant
 		variant_data = fields[9:]
-		variant_id = tuple(fields[0:5])
+		variant_id = tuple([fields[i] for i in [0,1,3,4]]) #Use CHR, POS, REF and ALT as the id of a variant.
 		if variant_id in ase_dict:
 			variant_counts = ase_dict[variant_id]
 			#Ensure that ASE count and VCF file samples are in the same order
