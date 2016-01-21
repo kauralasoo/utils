@@ -15,6 +15,7 @@ parser.add_argument("--geneids", help = "List of gene ids in the same order as i
 parser.add_argument("--geneMetadata", help = "Gene metadata matrix with the following columns (in the same order): gene_id, chromosome_name, strand, exon_starts, exon_ends, range_start, range_end, feature_snp_count, cis_snp_count. Values in range_start and range_end columns specify the start and end of the cis region.")
 parser.add_argument("--execute", help = "Execute the script", default = "False")
 parser.add_argument("--rasqualBin", help = "Path to the the RASQUAL binary.", default = "/nfs/users/nfs_n/nk5/Project/C/RASQUAL/master/bin/rasqual_mt_icc")
+parser.add_argument("--parameters", help = "Additional parameters passed on to RASQUAL. These must be in single quotes and the first dash must be escaped with the \\ character, for example '\\--population-only'.")
 args = parser.parse_args()
 
 #Check that none of the required arguments is empty
@@ -58,19 +59,27 @@ for line in fileinput.input("-"):
 	for gene_id in gene_ids:
 		feature_number = gene_dict[gene_id]
 
-		#Parse gene meta data
+		#Parse gene metadata
 		gene_meta = metadata_dict[gene_id]
 		cis_window = gene_meta[1] + ":" + gene_meta[5] + "-" + gene_meta[6]
 		n_feature_snps = gene_meta[7]
 		n_cis_snps = gene_meta[8]
 		feature_start = gene_meta[3]
 		feature_end = gene_meta[4]
-
-		tabix_command = " ".join(["tabix", args.vcf, cis_window])
+		
+		#Construct RASQUAL command
 		rasqual_command = " ".join([args.rasqualBin, "-y", args.readCounts, "-k", args.offsets, "-n", args.n, "-j", str(feature_number), 
 			"-f", gene_id, "-l", n_cis_snps, "-m", n_feature_snps, "-s", feature_start, "-e", feature_end, " -z"])
-		if (args.covariates != None): #If specified, add covariates to the rasqual command
+		#If specified, add covariates to the rasqual command
+		if (args.covariates != None): 
 			rasqual_command = " ".join([rasqual_command, "-x", args.covariates])
+		#Add any additional parameters to RASQUAL
+		if (args.parameters != None):
+			params = args.parameters[1:]#Remove the first escape character
+			rasqual_command = " ".join([rasqual_command, params])
+		
+		#Construct full command
+		tabix_command = " ".join(["tabix", args.vcf, cis_window])
 		output_file = args.outprefix + "." + batch_id + ".txt"
 		command = tabix_command + " | " + rasqual_command + " >> " + output_file
 		sys.stdout.write(command + "\n")
