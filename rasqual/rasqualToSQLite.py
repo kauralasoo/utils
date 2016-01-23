@@ -16,7 +16,7 @@ args = parser.parse_args()
 sql_path = os.path.join(args.outdir, args.prefix + ".sql")
 rasqual_path = os.path.join(args.indir, args.prefix + args.insuffix)
 sql_file = open(sql_path, "w")
-create_table = "create table rasqual(gene_id text, snp_id text, chr text, pos int, allele_freq real, chisq real, effect_size real, n_feature_snps int, n_cis_snps int, converged int);\n"
+create_table = "create table rasqual(gene_id text, snp_id text, chr text, pos int, allele_freq real, HWE real, IA real, chisq real, effect_size real, delta real, phi real, overdisp real, n_feature_snps int, n_cis_snps int, converged int);\n"
 sql_file.write(create_table)
 sql_file.write('.separator "\\t"' + "\n")
 sql_file.write(".import " + rasqual_path + " rasqual\n")
