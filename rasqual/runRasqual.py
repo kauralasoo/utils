@@ -5,34 +5,18 @@ import fileinput
 import subprocess
 
 parser = argparse.ArgumentParser(description = "Run RASQUAL on a list of genes. The script expects two-column TAB-separared file in STDIN, where the first column contains batch id and the second column contains comma-separated list of gene ids. Example: batch_1\tATAC_peak_13421,ATAC_peak_13422", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("--readCounts", help = "Binary matrix containing read counts in each sample (genes in rows, samples in columns).")
-parser.add_argument("--offsets", help = "Binary matrix with sample-specific offsets (genes in rows, samples in columns).")
-parser.add_argument("--covariates", help = "Binary matrix with covariates (samples in rows, covariates in columns).")
-parser.add_argument("--n", help = "Number of samples.")
-parser.add_argument("--vcf", help = "Path to the VCF file with ASE counts.")
-parser.add_argument("--outprefix", help = "Prefix of the output file.")
-parser.add_argument("--geneids", help = "List of gene ids in the same order as in the counts matrix.")
-parser.add_argument("--geneMetadata", help = "Gene metadata matrix with the following columns (in the same order): gene_id, chromosome_name, strand, exon_starts, exon_ends, range_start, range_end, feature_snp_count, cis_snp_count. Values in range_start and range_end columns specify the start and end of the cis region.")
+parser.add_argument("--readCounts", help = "Binary matrix containing read counts in each sample (genes in rows, samples in columns).", required = True)
+parser.add_argument("--offsets", help = "Binary matrix with sample-specific offsets (genes in rows, samples in columns).", required = True)
+parser.add_argument("--covariates", help = "Optional binary matrix with covariates (samples in rows, covariates in columns).")
+parser.add_argument("--n", help = "Number of samples.", required = True)
+parser.add_argument("--vcf", help = "Path to the VCF file with ASE counts.", required = True)
+parser.add_argument("--outprefix", help = "Prefix of the output file.", required = True)
+parser.add_argument("--geneids", help = "List of gene ids in the same order as in the counts matrix.", required = True)
+parser.add_argument("--geneMetadata", help = "Gene metadata matrix with the following columns (in the same order): gene_id, chromosome_name, strand, exon_starts, exon_ends, range_start, range_end, feature_snp_count, cis_snp_count. Values in range_start and range_end columns specify the start and end of the cis region.", required = True)
 parser.add_argument("--execute", help = "Execute the script", default = "False")
 parser.add_argument("--rasqualBin", help = "Path to the the RASQUAL binary.", default = "/nfs/users/nfs_n/nk5/Project/C/RASQUAL/master/bin/rasqual_mt_icc")
 parser.add_argument("--parameters", help = "Additional parameters passed on to RASQUAL. These must be in single quotes and the first dash must be escaped with the \\ character, for example '\\--population-only'.")
 args = parser.parse_args()
-
-#Check that none of the required arguments is empty
-if args.geneids == None:
-	sys.exit("--geneids is a required parameter.")
-if args.readCounts == None:
-	sys.exit("--readCounts is a required parameter.")
-if args.offsets == None:
-	sys.exit("--offsets is a required parameter.")
-if args.n == None:
-	sys.exit("--n is a required parameter.")
-if args.vcf == None:
-	sys.exit("--vcf is a required parameter.")
-if args.geneMetadata == None:
-	sys.exit("--geneMetadata is a required parameter.")
-if args.outprefix == None:
-	sys.exit("--outprefix is a required parameter.")
 
 #Import gene IDs into a dict:
 gene_dict = dict()
