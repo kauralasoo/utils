@@ -39,10 +39,13 @@ for gene in metadata_file:
 for line in fileinput.input("-"):
 	line = line.rstrip().split("\t")
 	batch_id = line[0]
+
 	#Make sure that the output file is empty before writing
 	output_file = args.outprefix + "." + batch_id + ".txt"
 	o_file = open(output_file, 'w')
 	o_file.close()
+
+	#Itereate over genes in a batch
 	gene_ids = line[1].split(",")
 	for gene_id in gene_ids:
 		feature_number = gene_dict[gene_id]
