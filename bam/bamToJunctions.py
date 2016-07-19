@@ -30,6 +30,7 @@ for line in fileinput.input("-"):
 		#Construct commands
 		bam2bed_command = " ".join(["samtools view", bam_file, "| python", cs_script, "|", sam2bed_script, "--use-RNA-strand -", bed_file])
 		bed2junc_command = " ".join([bed2junc_script, bed_file, junctions_file])
+		remove_bed_command = " ".join(["rm", bed_file])
 
 		#Print and execute
 		print(bam2bed_command)
@@ -37,3 +38,5 @@ for line in fileinput.input("-"):
 		if args.execute == "True":
 			subprocess.call(['bash','-c',bam2bed_command])
 			subprocess.call(['bash','-c',bed2junc_command])
+			subprocess.call(['bash','-c',remove_bed_command])
+
