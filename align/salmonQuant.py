@@ -27,6 +27,6 @@ for line in fileinput.input("-"):
 	read2_file = os.path.join(args.fastqDir, sample_id + ".2" + args.fastqSuffix)
 
 	#Construct commpand
-	salmon_command = " ".join(["salmon --no-version-check quant --seqBias --gcBias --libType", args.libType, "--index", args.index, "-1", read1_file, "-2", read2_file, "-p", args.nCores, "--geneMap", args.geneMap, "-o", out_folder])
+	salmon_command = " ".join(["salmon --no-version-check quant --useVBOpt --seqBias --gcBias --libType", args.libType, "--index", args.index, "-1", read1_file, "-2", read2_file, "-p", args.nCores, "--geneMap", args.geneMap, "-o", out_folder])
 	print(salmon_command)
-	subprocess.call(['bash','-c',command])
+	subprocess.call(['bash','-c',salmon_command])
