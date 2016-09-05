@@ -37,11 +37,17 @@ for line in samples:
 	sample_id = fields[0]
 	lanelet_id = fields[1].split(";")[0]
 
-	print sample_id + "\t" + lanelet_id
-
 	#Fetch data from irods
 	path = buildIrodsPath(lanelet_id, "cram")
 	imeta_cmd = "imeta ls -d " + path
 	sample_meta = stringToMetaDict(subprocess.check_output(['bash','-c',imeta_cmd]))
-	if "sample_donor_id" in sample_meta:
-		print sample_meta["sample_donor_id"]
+	
+	sample_id1 = ""
+	sample_id2 = ""
+	if "sample_id" in sample_meta:
+		 sample_id1 = sample_meta["sample_id"]
+	if "sample" in sample_meta:
+		sample_id2 = sample_meta["sample"]
+	result = "\t".join([sample_id, lanelet_id, sample_id1, sample_id2])
+	print result
+
