@@ -21,6 +21,7 @@ for line in fileinput.input("-"):
 	out_folder = os.path.join(args.outputDir, sample_id)
 	if not os.path.exists(out_folder):
 		os.makedirs(out_folder)
+	
 	out_bam = os.path.join(out_folder, sample_id + args.bamSuffix)
 	read1_file = os.path.join(args.fastqDir, sample_id + ".1" + args.fastqSuffix)
 	read2_file = os.path.join(args.fastqDir, sample_id + ".2" + args.fastqSuffix)
