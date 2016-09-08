@@ -16,9 +16,9 @@ args = parser.parse_args()
 for line in fileinput.input("-"):
 	sample_id = line.rstrip()
 	infile = os.path.join(args.currentDir, sample_id, args.currentSubdir, args.filename)
-	outfile = os.path.join(args.newDir, ".".join([sample_id, args.suffix, args.filename, "gz"]))
+	outfile = os.path.join(args.newDir, sample_id, ".".join([sample_id, args.suffix, args.filename, "gz"]))
 
-	command = " ".join(["cat", infile, "| gzip >" outfile])
+	command = " ".join(["cat", infile, "| gzip >", outfile])
 	print(command)
 	subprocess.call(['bash','-c',command])
 
