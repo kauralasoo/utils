@@ -24,6 +24,10 @@ for line in fileinput.input("-"):
 		output_file = os.path.join(output_directory, chr_string)
 		tabix_command = " ".join(["tabix", sorted_file, str(i), "| cut -f 3,6 --output-delimiter ' ' >", output_file])
 		print tabix_command
+		subprocess.call(['bash','-c',tabix_command])
 	output_header_file = os.path.join(output_directory, "chrchr")
 	header_command = " ".join(["echo 'pos pval' >", output_header_file])
 	print(header_command)
+	subprocess.call(['bash','-c',header_command])
+
+
