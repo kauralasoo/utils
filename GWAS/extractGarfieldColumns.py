@@ -25,11 +25,13 @@ for line in fileinput.input("-"):
 		if i == 6:
 			#Exclude the MHCII region
 			region_1 = "6:1-20000000"
-			tabix_command = " ".join(["tabix", sorted_file, str(i), "| cut -f 3,6 --output-delimiter ' ' >", output_file])
+			tabix_command = " ".join(["tabix", sorted_file, region_1, "| cut -f 3,6 --output-delimiter ' ' >", output_file])
+			print tabix_command
 			subprocess.call(['bash','-c',tabix_command])
 
 			region_2 = "6:40000000"
-			tabix_command = " ".join(["tabix", sorted_file, str(i), "| cut -f 3,6 --output-delimiter ' ' >>", output_file])
+			tabix_command = " ".join(["tabix", sorted_file, region_2, "| cut -f 3,6 --output-delimiter ' ' >>", output_file])
+			print tabix_command
 			subprocess.call(['bash','-c',tabix_command])
 
 		else:
