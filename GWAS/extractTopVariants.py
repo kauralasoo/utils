@@ -23,8 +23,12 @@ for line in fileinput.input("-"):
 	o.write(header)
 	for line in f:
 		fields = line.split("\t")
-		if (float(fields[5]) < 1e-5):
+		p_value = fields[5]
+		try:
+			if (float(p_value) < 1e-5):
 			o.write(line)
+		except ValueError:
+			pass
 	o.close()
 	f.close()
 	
