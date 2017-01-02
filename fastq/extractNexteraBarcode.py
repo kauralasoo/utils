@@ -14,4 +14,4 @@ command = " ".join(["zcat ", args.fastq, " | grep CTGTCTCTTATACACATCTCCGAGCCCACG
 	" | cut -c 1-8 | grep -v X | sort | uniq -c | sort -n | tail -n 1"])
 
 #Run and report results to STDOUT
-subprocess.call(['bash','-c',header_command])
+subprocess.call(['bash','-c',command])
