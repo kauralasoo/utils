@@ -2,12 +2,13 @@ import os
 import argparse
 import fileinput
 import subprocess
+import gzip
 
 parser = argparse.ArgumentParser(description = "Extract transcript tags from GTF file.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--GTF", help = "Path to the GTF file.")
 args = parser.parse_args()
 
-file_handle = open(args.GTF)
+file_handle = gzip.open(args.GTF, "r")
 for line in file_handle:
 	line = line.rstrip()
 	#Remove headers
