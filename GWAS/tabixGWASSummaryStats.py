@@ -11,12 +11,17 @@ args = parser.parse_args()
 #Iterate over GWAS names from STDIN
 for line in fileinput.input("-"):
 	gwas_name = line.rstrip()
-	input_file = os.path.join(args.indir, gwas_name + ".txt")
+	input_file = os.path.join(args.indir, gwas_name + ".txt.gz")
 	sorted_file = os.path.join(args.indir, gwas_name + ".sorted.txt")
 	compressed_file = sorted_file + ".gz"
 
-	#Construct sort command
-	sort_command = " ".join(["head -n1", input_file, ">", sorted_file, "&& tail -n+2", input_file, "| sort -k2,2 -k3,3n >>", sorted_file])
+	#print header
+	header_command = " ".join(["zcat", input_file, "| head -n1 >", sorted_file])
+	print(header_command)
+	subprocess.call(['bash','-c',header_command])
+
+	#Sort
+	sort_command = " ".join(["zcat", input_file, "| tail -n+2 | sort -k2,2 -k3,3n >>", sorted_file])
 	print(sort_command)
 	subprocess.call(['bash','-c',sort_command])
 
